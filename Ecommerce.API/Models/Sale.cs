@@ -8,7 +8,7 @@
         public string CustomerName { get; set; } = string.Empty;
         public decimal UnitPrice { get; set; }   
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public List<Product> Products { get; set; } = new List<Product>();
         public decimal TotalAmount => UnitPrice * Quantity;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
