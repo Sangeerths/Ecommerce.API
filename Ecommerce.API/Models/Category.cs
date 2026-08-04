@@ -8,7 +8,6 @@
         public List<Product> Products { get; set; } = new List<Product>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime? DeletedAt { get; set; }
+        public bool IsDeleted { get; internal set; }
     }
 }
