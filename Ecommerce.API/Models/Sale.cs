@@ -12,6 +12,8 @@
         public decimal TotalAmount => UnitPrice * Quantity;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }    
 
     }
 }
