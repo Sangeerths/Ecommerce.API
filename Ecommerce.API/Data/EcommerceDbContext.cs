@@ -19,10 +19,6 @@ namespace Ecommerce.API.Data
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
 
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.Sales)
-                .WithMany(s => s.Products)
-                .UsingEntity(j => j.ToTable("ProductSales"));
 
             var seedDate = new DateTime(2025, 1, 1);
 
