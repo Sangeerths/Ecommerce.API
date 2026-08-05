@@ -9,6 +9,7 @@ namespace Ecommerce.API.Services
         Task<List<CategoryResponseDto>> GetAllCategoriesAsync();
         Task<CategoryResponseDto> GetCategoryByIdAsync(int categoryId);
         Task<CategoryResponseDto> CreateCategoryAsync(CategoryRequestDto categoryDto);
+        Task<CategoryResponseDto> UpdateCategoryAsync(CategoryRequestDto categoryDto);
     }
     public class CategoryService : ICategoryService
     {
@@ -62,5 +63,25 @@ namespace Ecommerce.API.Services
                 Description = result.Entity.Description
             };
         }
+
+        public async Task<CategoryResponseDto> UpdateCategoryAsync(int categoryId, CategoryRequestDto categoryDto)
+        {
+            var category = await _dbContext.Categories.FindAsync(categoryId);
+            if (category == null)
+            {
+                return null;
+            }
+            category.Name = categoryDto.Name;
+            category.Description = categoryDto.Description;
+            category.UpdatedAt = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+            return new CategoryResponseDto
+            {
+                CategoryId = category.CategoryId,
+                Name = category.Name,
+                Description = category.Description
+            };
+        }
+
     }
 }

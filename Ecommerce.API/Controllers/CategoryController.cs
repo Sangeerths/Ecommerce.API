@@ -40,5 +40,7 @@ namespace Ecommerce.API.Controllers
             var createdCategory = await _categoryService.CreateCategoryAsync(categoryDto);
             return CreatedAtAction(nameof(GetCategoryById), new { categoryId = createdCategory.CategoryId }, createdCategory);
         }
+
+
     }
 }
