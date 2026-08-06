@@ -9,7 +9,8 @@ namespace Ecommerce.API.Services
         Task<List<CategoryResponseDto>> GetAllCategoriesAsync();
         Task<CategoryResponseDto> GetCategoryByIdAsync(int categoryId);
         Task<CategoryResponseDto> CreateCategoryAsync(CategoryRequestDto categoryDto);
-        Task<CategoryResponseDto> UpdateCategoryAsync(CategoryRequestDto categoryDto);
+        Task<CategoryResponseDto> UpdateCategoryAsync(int categoryId, CategoryRequestDto categoryDto);
+        Task<bool> DeleteCategoryAsync(int categoryId);
     }
     public class CategoryService : ICategoryService
     {
@@ -82,6 +83,19 @@ namespace Ecommerce.API.Services
                 Description = category.Description
             };
         }
+
+        public async Task<bool> DeleteCategoryAsync(int categoryId)
+        {
+            var category = await _dbContext.Categories.FindAsync(categoryId);
+            if (category == null)
+            {
+                return false;
+            }
+            _dbContext.Categories.Remove(category);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 }

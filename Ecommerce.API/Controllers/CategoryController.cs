@@ -41,6 +41,26 @@ namespace Ecommerce.API.Controllers
             return CreatedAtAction(nameof(GetCategoryById), new { categoryId = createdCategory.CategoryId }, createdCategory);
         }
 
-
+        [HttpPut("{categoryId}")]
+        public async Task<IActionResult> UpdateCategory(int categoryId, CategoryRequestDto categoryDto)
+        {
+            var updatedCategory = await _categoryService.UpdateCategoryAsync(categoryId, categoryDto);
+            if (updatedCategory == null)
+            {
+                return NotFound();
+            }
+            return Ok(updatedCategory);
+        }
+        
+        [HttpDelete("{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
+        {
+            var deleted = await _categoryService.DeleteCategoryAsync(categoryId);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }
