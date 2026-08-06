@@ -6,7 +6,11 @@ namespace Ecommerce.API.Services
 {
     public interface IProductService
     {
-        Task<List<ProductResponseDto>> GetAllProductsAsync();   
+        Task<List<ProductResponseDto>> GetAllProductsAsync();
+        Task<ProductResponseDto> GetProductByIdAsync(int productId);
+        Task<ProductResponseDto> CreateProductAsync(ProductRequestDto productDto);
+        Task<ProductResponseDto> UpdateProductAsync(int productId, ProductRequestDto productDto);
+        Task<bool> DeleteProductAsync(int productId);
     }
     public class ProductService : IProductService
     {
@@ -45,6 +49,65 @@ namespace Ecommerce.API.Services
                 Price = product.Price,
                 CategoryId = product.CategoryId
             };
-        } 
+        }
+        
+        public async Task<ProductResponseDto> CreateProductAsync(ProductRequestDto productDto)
+        {
+            var product = new Models.Product
+            {
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price,
+                CategoryId = productDto.CategoryId,
+                StockQuantity = productDto.StockQuantity,
+            };
+            var result = await _dbContext.Products.AddAsync(product);
+            await _dbContext.SaveChangesAsync();
+            return new ProductResponseDto
+            {
+                ProductId = result.Entity.ProductId,
+                Name = result.Entity.Name,
+                Description = result.Entity.Description,
+                Price = result.Entity.Price,
+                StockQuantity = result.Entity.StockQuantity,
+                CategoryId = result.Entity.CategoryId
+            };
+        }
+
+        public async Task<ProductResponseDto> UpdateProductAsync(int productId, ProductRequestDto productDto)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return null;
+            }
+            product.Name = productDto.Name;
+            product.Description = productDto.Description;
+            product.Price = productDto.Price;
+            product.StockQuantity = productDto.StockQuantity;
+            product.CategoryId = productDto.CategoryId;
+            await _dbContext.SaveChangesAsync();
+            return new ProductResponseDto
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                StockQuantity = product.StockQuantity,
+                CategoryId = product.CategoryId
+            };
+        }
+        public async Task<bool> DeleteProductAsync(int productId)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return false;
+            }
+            product.IsDeleted = true;
+            product.DeletedAt = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

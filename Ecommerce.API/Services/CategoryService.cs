@@ -91,7 +91,9 @@ namespace Ecommerce.API.Services
             {
                 return false;
             }
-            _dbContext.Categories.Remove(category);
+
+            category.IsDeleted = true;
+            category.UpdatedAt = DateTime.UtcNow;
             await _dbContext.SaveChangesAsync();
             return true;
         }
