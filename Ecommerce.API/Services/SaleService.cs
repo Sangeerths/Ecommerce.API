@@ -108,7 +108,8 @@ namespace Ecommerce.API.Services
             {
                 return false;
             }
-            _dbContext.Sales.Remove(sale);
+            sale.IsDeleted = true;
+            sale.DeletedAt = DateTime.Now;
             await _dbContext.SaveChangesAsync();
             return true;
         }

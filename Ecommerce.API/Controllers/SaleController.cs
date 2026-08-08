@@ -50,8 +50,8 @@ namespace Ecommerce.API.Controllers
         [HttpDelete("{saleId}")]
         public async Task<IActionResult> DeleteSale(int saleId)
         {
-            var result = await _saleService.DeleteSaleAsync(saleId);
-            if (!result)
+            var deleted = await _saleService.DeleteSaleAsync(saleId);
+            if (!deleted)
             {
                 return NotFound();
             }
