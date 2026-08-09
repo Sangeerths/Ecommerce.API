@@ -1,7 +1,6 @@
 ﻿using Ecommerce.API.DTO.Pagination;
 using Ecommerce.API.DTO.Sale;
 using Ecommerce.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers

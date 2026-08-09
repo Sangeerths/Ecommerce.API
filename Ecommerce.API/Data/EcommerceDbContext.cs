@@ -15,9 +15,17 @@ namespace Ecommerce.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId);
+      .HasOne(p => p.Category)
+      .WithMany(c => c.Products)
+      .HasForeignKey(p => p.CategoryId)
+      .OnDelete(DeleteBehavior.Cascade);
+
+            // Product -> Sales
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Product)
+                .WithMany(p => p.Sales)
+                .HasForeignKey(s => s.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             var seedDate = new DateTime(2025, 1, 1);

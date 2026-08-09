@@ -44,7 +44,7 @@ namespace Ecommerce.API.Controllers
             return CreatedAtAction(nameof(GetCategoryById), new { categoryId = createdCategory.CategoryId }, createdCategory);
         }
 
-        [HttpPut("{categoryId}")]
+        [HttpPatch("{categoryId}")]
         public async Task<IActionResult> UpdateCategory(int categoryId, CategoryRequestDto categoryDto)
         {
             var updatedCategory = await _categoryService.UpdateCategoryAsync(categoryId, categoryDto);

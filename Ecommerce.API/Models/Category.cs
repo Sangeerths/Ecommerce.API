@@ -9,5 +9,6 @@
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
         public bool IsDeleted { get; internal set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }
