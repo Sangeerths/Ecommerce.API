@@ -1,4 +1,5 @@
-﻿using Ecommerce.API.DTO.Product;
+﻿using Ecommerce.API.DTO.Pagination;
+using Ecommerce.API.DTO.Product;
 using Ecommerce.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] PaginationParams paginationParams)
         {
-            var products = await _productService.GetAllProductsAsync();
+            var products = await _productService.GetAllProductsAsync(paginationParams);
             return Ok(products);
         }
 

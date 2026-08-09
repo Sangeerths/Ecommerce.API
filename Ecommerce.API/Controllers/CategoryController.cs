@@ -1,4 +1,5 @@
 ﻿using Ecommerce.API.DTO.Category;
+using Ecommerce.API.DTO.Pagination;
 using Ecommerce.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,10 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams paginationParams)
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+            var categories = await _categoryService.GetCategoriesAsync(paginationParams);
+
             return Ok(categories);
         }
 
@@ -27,6 +29,7 @@ namespace Ecommerce.API.Controllers
         public async Task<IActionResult> GetCategoryById(int categoryId)
         {
             var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+
             if (category == null)
             {
                 return NotFound();

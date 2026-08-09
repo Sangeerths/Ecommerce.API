@@ -1,4 +1,5 @@
 ﻿using Ecommerce.API.Data;
+using Ecommerce.API.DTO.Pagination;
 using Ecommerce.API.DTO.Sale;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace Ecommerce.API.Services
 {
     public interface ISaleService
     {
-        Task<List<SaleResponseDto>> GetAllSalesAsync();
+        Task<PagedResponse<SaleResponseDto>> GetAllSalesAsync(PaginationParams paginationParams);
         Task<SaleResponseDto> GetSaleByIdAsync(int saleId);
         Task<SaleResponseDto> CreateSaleAsync(SaleRequestDto saleDto);
         Task<SaleResponseDto> UpdateSaleAsync(int saleId, SaleRequestDto saleDto);
@@ -22,19 +23,35 @@ namespace Ecommerce.API.Services
         }
 
 
-        public async Task<List<SaleResponseDto>> GetAllSalesAsync()
+        public async Task<PagedResponse<SaleResponseDto>> GetAllSalesAsync(
+            PaginationParams paginationParams)
         {
-            var sales = await _dbContext.Sales.ToListAsync();
-            return sales.Select(s => new SaleResponseDto
-            {
-                SaleId = s.SaleId,
-                ProductId = s.ProductId,
-                Quantity = s.Quantity,
-                TotalPrice = s.TotalAmount,
-                SaleDate = s.SaleDate,
-                CustomerName = s.CustomerName
-            }).ToList();
+            var query = _dbContext.Sales
+                .Where(s => !s.IsDeleted);
+
+            var totalRecords = await query.CountAsync();
+
+            var sales = await query
+                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .Select(s => new SaleResponseDto
+                {
+                    SaleId = s.SaleId,
+                    ProductId = s.ProductId,
+                    Quantity = s.Quantity,
+                    TotalPrice = s.TotalAmount,
+                    SaleDate = s.SaleDate,
+                    CustomerName = s.CustomerName
+                })
+                .ToListAsync();
+
+            return new PagedResponse<SaleResponseDto>(
+                sales,
+                paginationParams.PageNumber,
+                paginationParams.PageSize,
+                totalRecords);
         }
+
 
         public async Task<SaleResponseDto> GetSaleByIdAsync(int saleId)
         {

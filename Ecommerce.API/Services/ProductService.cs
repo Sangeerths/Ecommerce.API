@@ -1,4 +1,6 @@
 ﻿using Ecommerce.API.Data;
+using Ecommerce.API.DTO.Category;
+using Ecommerce.API.DTO.Pagination;
 using Ecommerce.API.DTO.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +8,7 @@ namespace Ecommerce.API.Services
 {
     public interface IProductService
     {
-        Task<List<ProductResponseDto>> GetAllProductsAsync();
+        Task<PagedResponse<ProductResponseDto>> GetAllProductsAsync(PaginationParams paginationParams);
         Task<ProductResponseDto> GetProductByIdAsync(int productId);
         Task<ProductResponseDto> CreateProductAsync(ProductRequestDto productDto);
         Task<ProductResponseDto> UpdateProductAsync(int productId, ProductRequestDto productDto);
@@ -21,18 +23,35 @@ namespace Ecommerce.API.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<ProductResponseDto>> GetAllProductsAsync()
+        public async Task<PagedResponse<ProductResponseDto>> GetAllProductsAsync(
+           PaginationParams paginationParams)
         {
-            var products = await _dbContext.Products.ToListAsync();
-            return products.Select(p => new ProductResponseDto
-            {
-                ProductId = p.ProductId,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                CategoryId = p.CategoryId
-            }).ToList();
+            var query = _dbContext.Products
+                .Where(p => !p.IsDeleted);
+
+            var totalRecords = await query.CountAsync();
+
+            var products = await query
+                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .Select(p => new ProductResponseDto
+                {
+                    ProductId = p.ProductId,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    StockQuantity = p.StockQuantity,
+                    CategoryId = p.CategoryId
+                })
+                .ToListAsync();
+
+            return new PagedResponse<ProductResponseDto>(
+                products,
+                paginationParams.PageNumber,
+                paginationParams.PageSize,
+                totalRecords);
         }
+
 
         public async Task<ProductResponseDto> GetProductByIdAsync(int productId)
         {

@@ -1,12 +1,13 @@
 ﻿using Ecommerce.API.Data;
 using Ecommerce.API.DTO.Category;
+using Ecommerce.API.DTO.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.API.Services
 {
     public interface ICategoryService
     {
-        Task<List<CategoryResponseDto>> GetAllCategoriesAsync();
+        Task<PagedResponse<CategoryResponseDto>> GetCategoriesAsync(PaginationParams paginationParams);
         Task<CategoryResponseDto> GetCategoryByIdAsync(int categoryId);
         Task<CategoryResponseDto> CreateCategoryAsync(CategoryRequestDto categoryDto);
         Task<CategoryResponseDto> UpdateCategoryAsync(int categoryId, CategoryRequestDto categoryDto);
@@ -21,15 +22,28 @@ namespace Ecommerce.API.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<CategoryResponseDto>> GetAllCategoriesAsync()
+        public async Task<PagedResponse<CategoryResponseDto>> GetCategoriesAsync(
+    PaginationParams paginationParams)
         {
-            var categories = await _dbContext.Categories.ToListAsync();
-            return categories.Select(c => new CategoryResponseDto
-            {
-                CategoryId = c.CategoryId,
-                Name = c.Name,
-                Description = c.Description
-            }).ToList();
+            var query = _dbContext.Categories.AsQueryable();
+
+            var totalRecords = await query.CountAsync();
+
+            var categories = await query
+                .Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .Select(c => new CategoryResponseDto
+                {
+                    CategoryId = c.CategoryId,
+                    Name = c.Name
+                })
+                .ToListAsync();
+
+            return new PagedResponse<CategoryResponseDto>(
+                categories,
+                paginationParams.PageNumber,
+                paginationParams.PageSize,
+                totalRecords);
         }
 
         public async Task<CategoryResponseDto> GetCategoryByIdAsync(int categoryId)

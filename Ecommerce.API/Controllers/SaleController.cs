@@ -1,4 +1,5 @@
-﻿using Ecommerce.API.DTO.Sale;
+﻿using Ecommerce.API.DTO.Pagination;
+using Ecommerce.API.DTO.Sale;
 using Ecommerce.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace Ecommerce.API.Controllers
             _saleService = saleService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllSales()
+        public async Task<IActionResult> GetAllSales([FromQuery] PaginationParams paginationParams)
         {
-            var sales = await _saleService.GetAllSalesAsync();
+            var sales = await _saleService.GetAllSalesAsync(paginationParams);
             return Ok(sales);
         }
         [HttpGet("{saleId}")]
