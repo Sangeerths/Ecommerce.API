@@ -76,9 +76,9 @@ namespace Ecommerce.API.Services
             {
                 Name = productDto.Name,
                 Description = productDto.Description,
-                Price = productDto.Price,
-                CategoryId = productDto.CategoryId,
-                StockQuantity = productDto.StockQuantity,
+                Price = (decimal)productDto.Price,
+                CategoryId = (int)productDto.CategoryId,
+                StockQuantity = (int)productDto.StockQuantity,
             };
             var result = await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
@@ -100,11 +100,26 @@ namespace Ecommerce.API.Services
             {
                 return null;
             }
-            product.Name = productDto.Name;
-            product.Description = productDto.Description;
-            product.Price = productDto.Price;
-            product.StockQuantity = productDto.StockQuantity;
-            product.CategoryId = productDto.CategoryId;
+            if (!string.IsNullOrWhiteSpace(productDto.Name))
+            {
+                product.Name = productDto.Name;
+            }
+            if (!string.IsNullOrWhiteSpace(productDto.Description))
+            {
+                product.Description = productDto.Description;
+            }
+            if (productDto.Price.HasValue)
+            {
+                product.Price = productDto.Price.Value;
+            }
+            if (productDto.StockQuantity.HasValue)
+            {
+                product.StockQuantity = productDto.StockQuantity.Value;
+            }
+            if (productDto.CategoryId.HasValue)
+            {
+                product.CategoryId = productDto.CategoryId.Value;
+            }
             await _dbContext.SaveChangesAsync();
             return new ProductResponseDto
             {

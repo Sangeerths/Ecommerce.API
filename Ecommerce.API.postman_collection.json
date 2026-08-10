@@ -1,0 +1,270 @@
+{
+  "info": {
+    "name": "Ecommerce.API",
+    "description": "CRUD requests for Product, Category, and Sale endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://localhost:7146"
+    },
+    {
+      "key": "productId",
+      "value": "1"
+    },
+    {
+      "key": "categoryId",
+      "value": "1"
+    },
+    {
+      "key": "saleId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Product?PageNumber=1&PageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Product"],
+              "query": [
+                { "key": "PageNumber", "value": "1" },
+                { "key": "PageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Product/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Product", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sample Product\",\n  \"description\": \"Sample description\",\n  \"price\": 29.99,\n  \"stockQuantity\": 100,\n  \"categoryId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Product",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Product"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Product\",\n  \"description\": \"Updated description\",\n  \"price\": 34.99,\n  \"stockQuantity\": 80,\n  \"categoryId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Product/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Product", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Product/{{productId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Product", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Category?PageNumber=1&PageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Category"],
+              "query": [
+                { "key": "PageNumber", "value": "1" },
+                { "key": "PageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Category By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Category", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sample Category\",\n  \"description\": \"Sample description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Category",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Category"]
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Category\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Category", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Category/{{categoryId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Category", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sale",
+      "item": [
+        {
+          "name": "Get All Sales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Sale?PageNumber=1&PageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Sale"],
+              "query": [
+                { "key": "PageNumber", "value": "1" },
+                { "key": "PageSize", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Sale By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Sale/{{saleId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Sale", "{{saleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Create Sale",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 2,\n  \"unitPrice\": 29.99,\n  \"customerName\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Sale",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Sale"]
+            }
+          }
+        },
+        {
+          "name": "Update Sale",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 3,\n  \"unitPrice\": 29.99,\n  \"customerName\": \"Jane Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/Sale/{{saleId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Sale", "{{saleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Sale",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/Sale/{{saleId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "Sale", "{{saleId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
