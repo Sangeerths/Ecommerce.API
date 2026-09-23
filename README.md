@@ -46,8 +46,8 @@ Ecommerce.API/
 
 ### Prerequisites
 
-- [.NET SDK](https://dotnet.microsoft.com/download) (version matching the project's `.csproj` target framework)
-- A SQL database instance (e.g. SQL Server / PostgreSQL, depending on the configured EF Core provider)
+- [.NET SDK](https://dotnet.microsoft.com/download) 
+- A SQL Server
 
 ### Setup
 
