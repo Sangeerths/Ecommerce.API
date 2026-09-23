@@ -1,6 +1,6 @@
-﻿namespace Ecommerce.API.DTO.Category;
+﻿namespace ECommerce.UI.DTO;
 
-public class CategoryResponseDto
+public class CategoryDto
 {
     public int CategoryId { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.API.DTO.Product;
+﻿namespace ECommerce.UI.DTO;
 
 public class ProductRequestDto
 {

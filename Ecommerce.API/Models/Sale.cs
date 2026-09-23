@@ -1,29 +1,24 @@
-﻿namespace Ecommerce.API.Models
+﻿namespace Ecommerce.API.Models;
+
+public class Sale
 {
-    public class Sale
-    {
-        public int SaleId { get; set; }
+    public int SaleId { get; set; }
 
-        public int Quantity { get; set; }
+    public DateTime SaleDate { get; set; } = DateTime.UtcNow;
 
-        public DateTime SaleDate { get; set; } = DateTime.UtcNow;
+    public string CustomerName { get; set; } = string.Empty;
 
-        public string CustomerName { get; set; } = string.Empty;
+    public ICollection<SaleItem> SaleItems { get; set; }
+        = new List<SaleItem>();
 
-        public decimal UnitPrice { get; set; }
+    public decimal TotalAmount =>
+        SaleItems.Sum(x => x.UnitPrice * x.Quantity);
 
-        public int ProductId { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Product Product { get; set; } = null!;
+    public DateTime? UpdatedAt { get; set; }
 
-        public decimal TotalAmount => UnitPrice * Quantity;
+    public bool IsDeleted { get; set; } = false;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public bool IsDeleted { get; set; } = false;
-
-        public DateTime? DeletedAt { get; set; }
-    }
+    public DateTime? DeletedAt { get; set; }
 }

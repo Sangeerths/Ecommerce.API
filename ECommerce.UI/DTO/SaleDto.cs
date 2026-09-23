@@ -1,6 +1,6 @@
-﻿namespace Ecommerce.API.DTO.Sale;
+﻿namespace Ecommerce.UI.DTO.Sale;
 
-public class SaleResponseDto
+public class SaleDto
 {
     public int SaleId { get; set; }
 
@@ -10,10 +10,9 @@ public class SaleResponseDto
 
     public decimal TotalPrice { get; set; }
 
-    public List<SaleItemResponseDto> Items { get; set; } = new();
+    public List<SaleItemDto> Items { get; set; } = new();
 }
-
-public class SaleItemResponseDto
+public class SaleItemDto
 {
     public int ProductId { get; set; }
 

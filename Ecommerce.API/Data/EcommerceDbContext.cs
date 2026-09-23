@@ -5,30 +5,45 @@ namespace Ecommerce.API.Data
 {
     public class EcommerceDbContext : DbContext
     {
-        public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : base(options)
+        public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options)
+            : base(options)
         {
         }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleItem> SaleItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Category -> Products
             modelBuilder.Entity<Product>()
-      .HasOne(p => p.Category)
-      .WithMany(c => c.Products)
-      .HasForeignKey(p => p.CategoryId)
-      .OnDelete(DeleteBehavior.Cascade);
-
-            // Product -> Sales
-            modelBuilder.Entity<Sale>()
-                .HasOne(s => s.Product)
-                .WithMany(p => p.Sales)
-                .HasForeignKey(s => s.ProductId)
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Sale -> SaleItems
+            modelBuilder.Entity<SaleItem>()
+                .HasOne(si => si.Sale)
+                .WithMany(s => s.SaleItems)
+                .HasForeignKey(si => si.SaleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Product -> SaleItems
+            modelBuilder.Entity<SaleItem>()
+                .HasOne(si => si.Product)
+                .WithMany(p => p.SaleItems)
+                .HasForeignKey(si => si.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             var seedDate = new DateTime(2025, 1, 1);
+
+            // =========================
+            // Categories
+            // =========================
 
             modelBuilder.Entity<Category>().HasData(
                 new Category
@@ -56,7 +71,12 @@ namespace Ecommerce.API.Data
                     IsDeleted = false
                 }
             );
-           
+
+
+            // =========================
+            // Products
+            // =========================
+
             modelBuilder.Entity<Product>().HasData(
                 new
                 {
@@ -104,39 +124,70 @@ namespace Ecommerce.API.Data
                 }
             );
 
+
+            // =========================
+            // Sales
+            // =========================
+
             modelBuilder.Entity<Sale>().HasData(
-                new
+                new Sale
                 {
                     SaleId = 1,
                     SaleDate = seedDate,
                     CustomerName = "Jane Doe",
-                    ProductId = 1,
-                    Quantity = 1,
-                    UnitPrice = 999.99m,
                     CreatedAt = seedDate,
                     IsDeleted = false
                 },
-                new
+                new Sale
                 {
                     SaleId = 2,
                     SaleDate = seedDate,
                     CustomerName = "John Smith",
-                    ProductId = 2,
-                    Quantity = 2,
-                    UnitPrice = 29.99m,
                     CreatedAt = seedDate,
                     IsDeleted = false
                 },
-                new
+                new Sale
                 {
                     SaleId = 3,
                     SaleDate = seedDate,
                     CustomerName = "Jane Doe",
+                    CreatedAt = seedDate,
+                    IsDeleted = false
+                }
+            );
+
+
+            // =========================
+            // Sale Items
+            // =========================
+
+            modelBuilder.Entity<SaleItem>().HasData(
+                new SaleItem
+                {
+                    SaleItemId = 1,
+                    SaleId = 1,
+                    ProductId = 1,
+                    Quantity = 1,
+                    UnitPrice = 999.99m,
+                    CreatedAt = seedDate
+                },
+                new SaleItem
+                {
+                    SaleItemId = 2,
+                    SaleId = 2,
+                    ProductId = 2,
+                    Quantity = 2,
+                    UnitPrice = 29.99m,
+                    CreatedAt = seedDate
+                },
+                new SaleItem
+                {
+                    SaleItemId = 3,
+                    SaleId = 3,
                     ProductId = 4,
                     Quantity = 1,
                     UnitPrice = 39.99m,
-                    CreatedAt = seedDate,
-                    IsDeleted = false
+                    CreatedAt = seedDate
                 }
             );
         }

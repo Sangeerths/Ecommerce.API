@@ -1,6 +1,6 @@
-﻿namespace Ecommerce.API.DTO.Product;
+﻿namespace ECommerce.UI.DTO;
 
-public class ProductResponseDto
+public class ProductDto
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = string.Empty;

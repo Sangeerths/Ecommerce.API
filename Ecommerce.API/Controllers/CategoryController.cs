@@ -1,69 +1,66 @@
 ﻿using Ecommerce.API.DTO.Category;
 using Ecommerce.API.DTO.Pagination;
 using Ecommerce.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+namespace Ecommerce.API.Controllers;
 
-namespace Ecommerce.API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class CategoryController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoryController : ControllerBase
+    private readonly ICategoryService _categoryService;
+
+    public CategoryController(ICategoryService categoryService)
     {
-        private readonly ICategoryService _categoryService;
+        _categoryService = categoryService;
+    }
 
-        public CategoryController(ICategoryService categoryService)
+    [HttpGet]
+    public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams paginationParams)
+    {
+        var categories = await _categoryService.GetCategoriesAsync(paginationParams);
+
+        return Ok(categories);
+    }
+
+    [HttpGet("{categoryId}")]
+    public async Task<IActionResult> GetCategoryById(int categoryId)
+    {
+        var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+
+        if (category == null)
         {
-            _categoryService = categoryService;
+            return NotFound();
         }
+        return Ok(category);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams paginationParams)
+    [HttpPost]
+    public async Task<IActionResult> CreateCategory(CategoryRequestDto categoryDto)
+    {
+        var createdCategory = await _categoryService.CreateCategoryAsync(categoryDto);
+        return CreatedAtAction(nameof(GetCategoryById), new { categoryId = createdCategory.CategoryId }, createdCategory);
+    }
+
+    [HttpPatch("{categoryId}")]
+    public async Task<IActionResult> UpdateCategory(int categoryId, CategoryRequestDto categoryDto)
+    {
+        var updatedCategory = await _categoryService.UpdateCategoryAsync(categoryId, categoryDto);
+        if (updatedCategory == null)
         {
-            var categories = await _categoryService.GetCategoriesAsync(paginationParams);
-
-            return Ok(categories);
+            return NotFound();
         }
-
-        [HttpGet("{categoryId}")]
-        public async Task<IActionResult> GetCategoryById(int categoryId)
+        return Ok(updatedCategory);
+    }
+    
+    [HttpDelete("{categoryId}")]
+    public async Task<IActionResult> DeleteCategory(int categoryId)
+    {
+        var deleted = await _categoryService.DeleteCategoryAsync(categoryId);
+        if (!deleted)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return Ok(category);
+            return NotFound();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCategory(CategoryRequestDto categoryDto)
-        {
-            var createdCategory = await _categoryService.CreateCategoryAsync(categoryDto);
-            return CreatedAtAction(nameof(GetCategoryById), new { categoryId = createdCategory.CategoryId }, createdCategory);
-        }
-
-        [HttpPatch("{categoryId}")]
-        public async Task<IActionResult> UpdateCategory(int categoryId, CategoryRequestDto categoryDto)
-        {
-            var updatedCategory = await _categoryService.UpdateCategoryAsync(categoryId, categoryDto);
-            if (updatedCategory == null)
-            {
-                return NotFound();
-            }
-            return Ok(updatedCategory);
-        }
-        
-        [HttpDelete("{categoryId}")]
-        public async Task<IActionResult> DeleteCategory(int categoryId)
-        {
-            var deleted = await _categoryService.DeleteCategoryAsync(categoryId);
-            if (!deleted)
-            {
-                return NotFound();
-            }
-            return NoContent();
-        }
+        return NoContent();
     }
 }
